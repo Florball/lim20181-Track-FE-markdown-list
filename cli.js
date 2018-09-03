@@ -1,10 +1,25 @@
 #!/usr/bin/env node
 
 // captura los argumentos dados en línea de comando
-// const [,, ...args] = process.argv
-// console.log(`hola mundo ${args}`)
 
-let fs = require('fs');
+
+const fs = require('fs');
+const [, , ...args] = process.argv
+const path = require('path');
+const linkAbsolute = path.resolve(`${args[0]}`)
+const markdownLinkExtractor = require('markdown-link-extractor');
+
+
+const markdown = () => {
+  fs.readFile(linkAbsolute, 'utf-8', (err, data) => {
+    if (err) throw err;
+    const links = markdownLinkExtractor(data);
+    links.forEach((link) => {
+      console.log(link);
+    });
+  });
+};
+markdown();
 
 // Crea un nuevo archivo
 // fs.writeFile("hola.txt", "Hola Mundo!", (err) => {
@@ -15,12 +30,10 @@ let fs = require('fs');
 //   console.log("El archivo fue creado correctamente");
 // });
 
-const [,, ...args] = process.argv 
+// if (link.length === 0) {
+//   console.log('ingresa md-links y una ruta valida');
+// }
 
-fs.readFile(`${args}`, 'utf-8', (err, data) => {
-  if(err) {
-    console.log('error: ', err);
-  } else {
-    console.log(data);
-  }
-});
+// args.forEach( () => {
+//   console.log(args[0])
+// });
